@@ -44,7 +44,7 @@
     - /var/named/chroot/var/named/dynamic
     - /var/named/chroot/var/named/data
 
-- name: Ensure named service is disable - using named-chroot
+- name: Ensure named service is stopped - using named-chroot
   ansible.builtin.service:
     name: named
     state: stopped

@@ -1,0 +1,20 @@
+;
+; Ansible managed
+;
+; Reverse zone file for local
+; vi: ft=bindzone
+
+$TTL 1W
+; item: 192.168.122, revdns 0.122.168.192.in-addr.arpa., revdns+regex 122.168.192.in-addr.arpa.
+$ORIGIN 122.168.192.in-addr.arpa.
+
+@ IN SOA localhost.local. hostmaster.local. (
+  2024011822
+  1D
+  1H
+  1W
+  1D )
+
+@                     IN  NS     localhost.local.
+
+127      IN  PTR  ns.local.

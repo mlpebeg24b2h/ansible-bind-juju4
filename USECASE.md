@@ -1,0 +1,82 @@
+- install packages
+  - bind-chroot
+  - bind-utils
+  - wget
+  - unzip
+  - net-tools
+- copy files
+  - /etc/named.rfc1912.zones -> /var/named/chroot/etc/named.rfc1912.zones
+  - /etc/named.root.key -> /var/named/chroot/etc/named.root.key
+  - /var/named/named.ca -> /var/named/chroot/etc/named.ca
+  - /var/named/named.localhost -> /var/named/chroot/var/named/named.localhost
+  - /var/named/named.loopback -> /var/named/chroot/var/named/named.loopback
+  - /var/named/named.empty -> /var/named/chroot/var/named/named.empty
+- create named.conf from template
+  - /var/named/chroot/etc/named.conf
+- create named.conf options with DNSSEC
+  - /var/named/chroot/etc/named.conf.options
+- restart bind
+- create zone forward file
+  - /var/named/chroot/etc/db.local.zone
+- create reverse zone file
+  - /var/named/chroot/etc/db.rev.122.168.192.in-addr.arpa.zone
+- create local zone
+  - /var/named/chroot/etc/named.conf.local-zone-local
+- add zone to named.conf.local
+  - /var/named/chroot/etc/named.conf.local
+    - include "/var/named/chroot/etc/named.conf.local-zone-local";
+- create log directory
+  - /var/named/chroot/var/log
+- add secure settings in local configuration
+  - /var/named/chroot/etc/named.conf.local
+    - acl xfer
+    - acl "trusted"
+    - logging
+- disable IPv6
+  - /etc/sysconfig/named
+    - OPTIONS="-4"
+- add local RPZ conf
+  - /var/named/chroot/etc/named-local-rpz.conf
+- add local RPZ zone
+  - /var/named/chroot/etc/local.rpz.zone
+- add local whitelist RPZ zone
+  - /var/named/chroot/etc/local-whitelist.rpz.zone
+- add rpz response policy in local configuration
+  - /var/named/chroot/etc/named.conf.local
+    - acl clients
+    - include "/var/named/chroot/etc/named-local-rpz.conf";
+- restart bind
+- add blocked domains settings
+  - /var/named/chroot/etc/blockeddomain.hosts
+- add malware domains list zone in local configuration
+  - /var/named/chroot/etc/named.conf.local
+    - include "/var/named/chroot/etc/spywaredomains.zones";
+- restart bind
+- install update script
+  - /usr/local/bin/bind-mdl-update.sh
+- check DNS resolution
+  - host malware-domains.com
+  - ps axu | grep bind
+- launch script
+  - /usr/local/bin/bind-mdl-update.sh
+- restart bind
+- disable zone check
+  - /etc/sysconfig/named
+    - DISABLE_ZONE_CHECKING=yes
+!!!!! NOT DONE --> !!!!!
+- install misp update script
+  - /usr/local/bin/misp-bind-rpz-fetch.sh
+- run misp-bind-rpz-fetch.sh once
+  - /usr/local/bin/misp-bind-rpz-fetch.sh
+- check rpz retrieve is correct
+  - head -1 /var/named/chroot/etc/misp.rpz
+- add misp2bind cron job
+  - /usr/local/bin/misp-bind-rpz-fetch.sh
+!!!!! --> NOT DONE !!!!!
+- ensure network config scripts have local host resolver
+  - RHEL 9 ????
+    - DNS1=127.0.0.1
+- add local host resolver to resolv.conf
+  - /etc/resolv.conf
+    - nameserver 127.0.0.1
+- enable bind service

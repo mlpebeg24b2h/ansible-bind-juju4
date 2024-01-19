@@ -1,0 +1,21 @@
+;
+; Ansible managed
+;
+; Zone file for local
+
+$ORIGIN local.
+$TTL 1W
+
+@ IN SOA localhost.local. hostmaster.local. (
+  2024011822
+  1D
+  1H
+  1W
+  1D )
+
+@                    IN  NS     localhost.local.
+
+
+alpha                IN  A      192.168.1.1
+centaur              IN  CNAME  alpha
+ns                   IN  A      192.168.122.127
